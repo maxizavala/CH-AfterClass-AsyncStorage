@@ -34,7 +34,7 @@ export default function App() {
             await AsyncStorage.removeItem(clave);
             Alert.alert(
                 "Dato Eliminado",
-                "Se ha eliminado con exito.",
+                "El dato se ha eliminado con exito.",
             )
             hook('')
         }
