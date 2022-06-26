@@ -1,8 +1,48 @@
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 
 export default function App() {
+
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [edad, setEdad] = useState();
+
+    const guardar = async (clave, valor) => {
+        try {
+            await AsyncStorage.setItem(clave, valor)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const leer = async (clave, hook) => {
+        try {
+            const valor = await AsyncStorage.getItem(clave)
+            if(valor !== null) {
+                hook(valor)
+            }
+            } catch(e) {
+                console.log(e)
+            }
+    }
+
+    const borrar = async (clave, hook) => {
+        try {
+            await AsyncStorage.removeItem(clave);
+            Alert.alert(
+                "Dato Eliminado",
+                "Se ha eliminado con exito.",
+            )
+            hook('')
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
+
     return (
         <>
             <View style={styles.container}>
@@ -14,21 +54,23 @@ export default function App() {
                     <TextInput
                         style={styles.input}
                         autoCapitalize="none"
+                        value={nombre}
+                        onChangeText={setNombre}
                     />
                     <Button
                         title="read"
                         color="#85929E"
-                        onPress={() => null}
+                        onPress={() => leer('name', setNombre)}
                     />
                     <Button
                         title="save"
                         color="#85929E"
-                        onPress={() => null}
+                        onPress={() => guardar('name', nombre)}
                     />
                     <Button
                         title="delete"
                         color="#85929E"
-                        onPress={() => null}
+                        onPress={() => borrar('name', setNombre)}
                     />
                 </View>
 
@@ -37,21 +79,23 @@ export default function App() {
                     <TextInput
                         style={styles.input}
                         autoCapitalize="none"
+                        value={apellido}
+                        onChangeText={setApellido}
                     />
                     <Button
                         title="read"
                         color="#85929E"
-                        onPress={() => null}
+                        onPress={() => leer('lastName', setApellido)}
                     />
                     <Button
                         title="save"
                         color="#85929E"
-                        onPress={() => null}                    
+                        onPress={() => guardar('lastName', apellido)}                   
                     />
                     <Button
                         title="delete"
                         color="#85929E"
-                        onPress={() => null}                    
+                        onPress={() => borrar('lastName', setApellido)}                    
                     />
                 </View>
 
@@ -60,21 +104,23 @@ export default function App() {
                     <TextInput
                         style={styles.input}
                         autoCapitalize="none"
+                        value={edad}
+                        onChangeText={setEdad}
                     />
                     <Button
                         title="read"
                         color="#85929E"
-                        onPress={() => null}                    
+                        onPress={() => leer('age', setEdad)}                   
                     />
                     <Button
                         title="save"
                         color="#85929E"
-                        onPress={() => null}                    
+                        onPress={() => guardar('age', edad)}                    
                     />
                     <Button
                         title="delete"
                         color="#85929E"
-                        onPress={() => null}                    
+                        onPress={() => borrar('age', setEdad)}                   
                     />
                 </View>
 
