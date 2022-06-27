@@ -43,6 +43,48 @@ export default function App() {
         }
     }
 
+    const guardarTodo = async (valor) => {
+        try {
+            const jsonValor = JSON.stringify(valor)
+            await AsyncStorage.setItem('allData', jsonValor)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const leerTodo = async () => {
+        try {
+            const jsonValor = await AsyncStorage.getItem('allData')
+            if (jsonValor != null) {
+                let data = JSON.parse(jsonValor)
+                setNombre(data.nombre)
+                setApellido(data.apellido)
+                setEdad(data.edad)
+                return
+            } else {
+                return null
+            }
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    const borrarTodo = async () => {
+        try {
+            await AsyncStorage.removeItem('allData');
+            Alert.alert(
+                "Datos Eliminado",
+                "Los datos se han eliminado con exito.",
+            )
+            setNombre('')
+            setApellido('')
+            setEdad('')
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
+
     return (
         <>
             <View style={styles.container}>
@@ -130,17 +172,17 @@ export default function App() {
             <Button
                 title="read all"
                 color="#85929E"
-                onPress={() => null}            
+                onPress={() => leerTodo()}            
             />
             <Button
                 title="save all"
                 color="#85929E"
-                onPress={() => null}            
+                onPress={() => guardarTodo({nombre: nombre, apellido: apellido, edad:edad})}            
             />
             <Button
                 title="delete all"
                 color="#85929E"
-                onPress={() => null}            
+                onPress={() => borrarTodo()}            
             />
         </View>
 
